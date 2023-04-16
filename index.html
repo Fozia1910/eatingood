@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Treatment</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="treatment.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&display=swap');
+
+    body {
+      background-color: #FFC0CB;
+    }
+
+    .container-fluid {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .section-nutrition {
+      background-color: #9be7ef;
+      width: 80%;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .card {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease-in forwards;
+      animation-delay: 0.5s;
+    }
+
+    .nutrition {
+      font-weight: bold;
+    }
+
+    .card-bodyy {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease-in forwards;
+      animation-delay: 0.5s;
+    }
+
+    .mt-5 {
+      margin-top: 5rem !important;
+    }
+
+    .btn-primary {
+      background-color: #28C76F;
+      border-color: #28C76F;
+    }
+
+    .btn-primary:hover {
+      background-color: #1ab059;
+      border-color: #1ab059;
+    }
+
+    h1, .card-title {
+      font-family: 'Roboto Slab', serif;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="section-nutrition">
+      <h1 class="mb-4">Find Nutritional Values</h1>
+      <form onsubmit="searchNutrition(event)" class="mb-5">
+        <div class="input-group">
+          <input type="text" id="query" class="form-control" placeholder="Enter a food item, e.g., '1 apple'">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+      </form>
+      <div id="results"></div>
+    </div>
+  </div>
+
+  
+   
+  <script>
+    const API_KEY = '4d3b12b7f5fe1e95eb234436f73dda62';
+        const APP_ID = 'fcc9ef1c';
+
+    async function searchNutrition(event) {
+      event.preventDefault();
+
+      const query = document.getElementById('query').value.trim();
+      if (!query) {
+        return;
+      }
+
+      const url = `https://api.edamam.com/api/nutrition-data?app_id=${APP_ID}&app_key=${API_KEY}&ingr=${encodeURIComponent(query)}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        displayResults(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    function displayResults(data) {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (!data.totalWeight) {
+        resultsDiv.innerHTML = '<p class="text-white">No results found. Please try a different food item.</p>';
+        return;
+      }
+
+      const resultDiv = document.createElement('div');
+      resultDiv.classList.add('card');
+      resultDiv.innerHTML = `
+        <div class="card-bodyy">
+          <h3 class="card-title">${data.ingredients[0].parsed[0].food}</h3>
+          <p class="nutrition">Weight: ${data.totalWeight.toFixed(2)} grams</p>
+          <p class="nutrition">Calories: ${data.calories.toFixed(2)}</p>
+          <p class="nutrition">Protein: ${data.totalNutrients.PROCNT.quantity.toFixed(2)} grams</p>
+          <p class="nutrition">Fat: ${data.totalNutrients.FAT.quantity.toFixed(2)} grams</p>
+          <p class="nutrition">Carbohydrates: ${data.totalNutrients.CHOCDF.quantity.toFixed(2)} grams</p>
+        </div>
+      `;
+      resultsDiv.appendChild(resultDiv);
+    }
+  </script>
+  <script src="https://kit.fontawesome.com/4b9ba14b0f.js" crossorigin="anonymous"></script> 
+  <!-- Font Awesome icons -->
+  <script src="https://kit.fontawesome.com/4b9ba14b0f.js" crossorigin="anonymous"></script>
+
+  <!-- jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+ 
+
+</body>
+</html>
