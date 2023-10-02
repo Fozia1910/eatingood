@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'foziaapp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A75077956D2F4273AD993A758D9D08BB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_11A0F39E367B4A72B984C86FFF099C32 }}
           package: .
